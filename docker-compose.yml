@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  java-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gradle-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+      - JAVA_OPTS=-Xmx512m
+    restart: on-failure
+    volumes:
+      - gradle-cache:/home/gradle/.gradle
+
+volumes:
+  gradle-cache:
