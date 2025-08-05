@@ -84,7 +84,6 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
 
             // Campos opcionales
             caja.setIdMonedaLocal(request.idMonedaLocal());
-            caja.setCuentaGananciasPerdidas(request.cuentaGananciasPerdidas());
             caja.setInicioVigencia(request.inicioVigencia());
             caja.setFinVigencia(request.finVigencia());
             caja.setEstatus(request.estatus());

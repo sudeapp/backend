@@ -26,6 +26,7 @@ public class UsuarioDTO {
     private String fechaExpCod;
     private Integer estatus;
     private Long id_caho;
+    private String nombreCaho;
     private Long idPlanContable;
     private List<Long> rol = new ArrayList<>();
     private Long idRol;
@@ -54,6 +55,7 @@ public class UsuarioDTO {
         // Mapeo de relaciones (IDs)
         if (entity.getCajaAhorro() != null) {
             dto.setId_caho(entity.getCajaAhorro().getIdCaho());
+            dto.setNombreCaho(entity.getCajaAhorro().getNombre());
             dto.setIdPlanContable(entity.getCajaAhorro().getIdPlanContable());
         }
 

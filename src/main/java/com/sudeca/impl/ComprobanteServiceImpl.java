@@ -45,24 +45,6 @@ public class ComprobanteServiceImpl implements IComprobanteService {
     private BigDecimal totalHaber = BigDecimal.ZERO;
     private BigDecimal totalDiferencia = BigDecimal.ZERO;
 
-    /*
-     public Comprobante saveComprobanteWithDetails(Comprobante comprobante) {
-        // carga los totales (Débitos = Créditos = diferencia)
-        cargarDebCre(comprobante.getComprobanteDet());
-        comprobante.setBsMontoDebito(totalDebe);
-        comprobante.setBsMontoCredito(totalHaber);
-        comprobante.setBsMontoDiferencia(totalDiferencia);
-
-        // Establecer la relación bidireccional
-        for (ComprobanteDet detalle : comprobante.getComprobanteDet()) {
-            detalle.setComprobante(comprobante);
-        }
-
-        // Guardar el comprobante (la cascada guardará los detalles)
-        return comprobanteRepository.save(comprobante);
-    }
-    */
-
     @Override
     public Comprobante saveComprobanteWithDetails(ComprobanteDTO comprobanteDTO) {
         // carga los totales (Débitos = Créditos = diferencia)
@@ -150,10 +132,10 @@ public class ComprobanteServiceImpl implements IComprobanteService {
             }
 
             if (fechaInicio != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("fechaCreacion"), fechaInicio));
+                predicates.add(cb.greaterThanOrEqualTo(root.get("fechaCbte"), fechaInicio));
             }
             if (fechaFin != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("fechaCreacion"), fechaFin));
+                predicates.add(cb.lessThanOrEqualTo(root.get("fechaCbte"), fechaFin));
             }
             if (nroComprobante != null) {
                 predicates.add(cb.equal(root.get("nroCbte"), nroComprobante));

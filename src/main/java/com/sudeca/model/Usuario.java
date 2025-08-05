@@ -68,6 +68,9 @@ public class Usuario implements Serializable {
   @Column(name = "fecha_exp_cod")
   private String fechaExpCod;
 
+  @Column(name = "usuario_caja")
+  private Integer usuarioCaja;
+
   @Column(name = "estatus")
   private Integer estatus;
 

@@ -69,9 +69,6 @@ public class CajaAhorro implements Serializable {
     @Column(name = "id_moneda_local")
     private Integer idMonedaLocal;
 
-    @Column(name = "cuenta_ganancias_perdidas", length = 20)
-    private String cuentaGananciasPerdidas;
-
     @Column(name = "fecha_inicio_vigencia")
     private LocalDate inicioVigencia;
 

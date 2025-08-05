@@ -21,7 +21,6 @@ public record CajaAhorroDTO(
         Short mesCierre,
         Short lapsoCierreMensual,
         Integer idMonedaLocal,
-        String cuentaGananciasPerdidas,
         LocalDate inicioVigencia,
         LocalDate finVigencia,
         LocalDate ultimoLapsoGenerado,

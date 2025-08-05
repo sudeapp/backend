@@ -14,15 +14,18 @@ import java.util.Optional;
  **/
 @Component
 public interface IUsuarioService {
+    Usuario getCedula(String cedula);
     Usuario getEmail(String email);
     Usuario getUser(String usuario);
-    Usuario saveUser(UsuarioDTO user);
+    Usuario saveUser(UsuarioDTO user,boolean isUserCaja);
     Usuario getLogin(Login login);
     List<Usuario> getAllUsers();
     List<Usuario> getAllUsersCaho(long idCaho);
+    List<Usuario> getAllUsersSudeca();
     Optional<Usuario> getUserById(long id);
     Usuario updateUser(long id, Usuario user);
     Usuario updateUserDTO(long id, UsuarioDTO user);
     void deleteUser(long id);
     Usuario getCodReset(PaswReset paswReset);
+    void updateUserStatus(Long idUsuario, Integer nuevoEstatus);
 }

@@ -11,11 +11,16 @@ import org.hibernate.annotations.Immutable;
 
 @Data
 @Entity
-@Immutable
-@Table(name = "vpc",schema = "contabilidad")
+@Table(name = "v_plan_contable",schema = "contabilidad")
 public class Vpc {
 
     @Id
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "id_caho")
+    private Long idCaho;
+
     @Column(name = "id_plan_catalogo")
     private int id_plan_catalogo;
 

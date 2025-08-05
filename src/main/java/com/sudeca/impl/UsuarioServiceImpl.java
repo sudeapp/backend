@@ -13,8 +13,10 @@ import com.sudeca.repository.UsuarioRolRepository;
 import com.sudeca.security.ValidateEmail;
 import com.sudeca.services.IUsuarioService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -54,7 +56,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public Usuario saveUser(UsuarioDTO dto) {
+    public Usuario saveUser(UsuarioDTO dto,boolean isUserCaja) {
         Usuario usuario = new Usuario();
         usuario.setPass(dto.getPass());
         usuario.setNombre(dto.getNombre());
@@ -69,11 +71,17 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuario.setEstatus(dto.getEstatus());
 
         // Campos que requieren lógica especial
-        usuario.setUsuario(dto.getEmail()); // Generar username
+        usuario.setUsuario(dto.getEmail()); // username
         usuario.setDateCreate(LocalDate.now()); // Fecha actual
         usuario.setCodReset(""); // Valor por defecto
-        usuario.setCajaAhorro(cajaAhorroRepository.findById(dto.getId_caho())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado")));
+
+        if(isUserCaja){
+            usuario.setUsuarioCaja(2);
+            usuario.setCajaAhorro(cajaAhorroRepository.findById(dto.getId_caho())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado")));
+        }else{
+            usuario.setUsuarioCaja(1);
+        }
 
         // Campos no presentes en el DTO
         usuario.setToken(null); // Inicializar como null
@@ -140,6 +148,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
+    public Usuario getCedula(String cedula) {
+        logger.info("**- getCedula: "+cedula);
+        return userRepository.findByCedula(cedula);
+    }
+
+    @Override
     public Usuario getUser(String usuario) {
         logger.info("**- getUser: "+usuario);
         return userRepository.findByUsuarioContainingIgnoreCase(usuario);
@@ -161,6 +175,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public List<Usuario> getAllUsersCaho(long idCaho) {
         return userRepository.findByCajaAhorroId(idCaho);
+    }
+
+    @Override
+    public List<Usuario> getAllUsersSudeca() {
+        return userRepository.findByUsuarioCaja(1);
     }
 
     @Override
@@ -216,6 +235,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 _user.setFechaNac(user.getFechaNac());
                 _user.setDateModified(LocalDate.now());
                 _user.setDateCreate(userData.get().getDateCreate());
+                _user.setUsuarioCaja(userData.get().getUsuarioCaja());
 
                 Rol rol = rolRepository.findById(user.getIdRol()).orElseThrow(() -> new EntityNotFoundException("Rol no encontrado"));
                 logger.info("userIn.getIdusuario(): "+_user.getIdUsuario());
@@ -260,4 +280,17 @@ public class UsuarioServiceImpl implements IUsuarioService {
             return null;
         }
     }
+
+    @Override
+    @Transactional
+    public void updateUserStatus(Long idUsuario, Integer nuevoEstatus) {
+        Usuario usuario = userRepository.findById(idUsuario)
+                .orElseThrow(() -> new OpenApiResourceNotFoundException("Usuario no encontrado con id: " + idUsuario));
+
+        usuario.setEstatus(nuevoEstatus);
+        usuario.setDateModified(LocalDate.now());  // Actualizar fecha de modificación
+
+        userRepository.save(usuario);
+    }
 }
+

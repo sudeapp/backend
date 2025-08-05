@@ -1,5 +1,6 @@
 package com.sudeca.repository;
 
+import com.sudeca.dto.LibroDiarioDTO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
@@ -50,6 +51,16 @@ public class FuncionesRepository {
                 Boolean.class,
                 idComprobante,
                 idUsuario
+        );
+    }
+
+    public boolean getMesCierre(int idCaho, LocalDate fecha) {
+        String sql = "SELECT contabilidad.mes_cierre(?, ?)";
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                idCaho,
+                fecha
         );
     }
 }

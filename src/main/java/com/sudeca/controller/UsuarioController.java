@@ -64,6 +64,23 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/get-users-sudeca")
+    public ResponseEntity<List<Usuario>> getAllUsersSudeca() {
+        try {
+            List<Usuario> users = userService.getAllUsersSudeca();
+            logger.info("Número de usuarios encontrados: {}", users.size());
+
+            // Siempre devuelve la lista, incluso si está vacía
+            return new ResponseEntity<>(users, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error al obtener usuarios sudeca {}: {}", e.getMessage(), e);
+
+            // Devuelve una lista vacía con error 500
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/get-id/{id}")
     public ResponseEntity<Usuario> getUserById(@PathVariable("id") long id) {
         Optional<Usuario> userData = userService.getUserById(id);
@@ -75,7 +92,32 @@ public class UsuarioController {
     public ResponseEntity<ResponseDTO> createUser(@RequestBody UsuarioDTO user) {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
-            Usuario _user = userService.saveUser(user);
+            Usuario _user = userService.saveUser(user,true);
+            logger.info("_user: "+_user);
+            if (_user != null){
+                responseDTO.setData(_user);
+                responseDTO.setStatus("success");
+                responseDTO.setMessage("guardar");
+            }else{
+                responseDTO.setData(null);
+                responseDTO.setStatus("notFound");
+                responseDTO.setMessage("error al guardar");
+            }
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setData(null);
+            responseDTO.setStatus("Error");
+            responseDTO.setMessage(ERROR_EXCEPTION_THROWN + " " +
+                    "Registro no guardado " + e.getMessage());
+            return ResponseEntity.ok(responseDTO);
+        }
+    }
+
+    @PostMapping("/save-sudeca")
+    public ResponseEntity<ResponseDTO> createUserSudeca(@RequestBody UsuarioDTO user) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            Usuario _user = userService.saveUser(user,false);
             logger.info("_user: "+_user);
             if (_user != null){
                 responseDTO.setData(_user);
@@ -175,4 +217,22 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/get-cedula")
+    public Usuario getCedula(@RequestParam("cedula") String cedula) {
+        logger.info("getCedula: "+ cedula);
+        try {
+            return userService.getCedula(cedula);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @PutMapping("/{id}/estatus")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateStatusDTO request) {
+
+        userService.updateUserStatus(id, request.getEstatus());
+        return ResponseEntity.ok().body("Estatus actualizado exitosamente");
+    }
 }

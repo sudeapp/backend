@@ -24,9 +24,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
   Usuario findByCodResetContainingIgnoreCase(String code);
 
   Usuario findByEmail(String email);
-
+  Usuario findByCedula(String cedula);
   @Query("SELECT u FROM Usuario u WHERE u.cajaAhorro.id = :idCaja")
   List<Usuario> findByCajaAhorroId(@Param("idCaja") long idCaja);
+
+  @Query("SELECT u FROM Usuario u WHERE u.usuarioCaja = :usuarioCaja")
+  List<Usuario> findByUsuarioCaja(@Param("usuarioCaja") int usuarioCaja);
 /*
   @Modifying
   @Query("DELETE FROM Usuario u WHERE u.cajaAhorro.idCaja = :idCaja AND u.idUsuario NOT IN :ids")

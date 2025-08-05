@@ -1,0 +1,6 @@
+systemProp.http.proxyHost=10.11.1.20
+systemProp.http.proxyPort=3128
+systemProp.https.proxyHost=10.11.1.20
+systemProp.https.proxyPort=3128
+systemProp.http.nonProxyHosts=localhost|127.0.0.*
+systemProp.https.nonProxyHosts=localhost|127.0.0.*
