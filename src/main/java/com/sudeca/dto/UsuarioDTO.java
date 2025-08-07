@@ -23,7 +23,7 @@ public class UsuarioDTO {
     private String celular;
     private String email;
     private LocalDate fechaNac;
-    private String fechaExpCod;
+    private LocalDate fechaExpCod;
     private Integer estatus;
     private Long id_caho;
     private String nombreCaho;

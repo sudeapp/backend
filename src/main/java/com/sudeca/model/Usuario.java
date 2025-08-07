@@ -11,7 +11,6 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -66,7 +65,7 @@ public class Usuario implements Serializable {
   private String codReset;
 
   @Column(name = "fecha_exp_cod")
-  private String fechaExpCod;
+  private LocalDate fechaExpCod;
 
   @Column(name = "usuario_caja")
   private Integer usuarioCaja;

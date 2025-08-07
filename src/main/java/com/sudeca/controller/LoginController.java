@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.sudeca.security.Constans.*;
@@ -121,11 +122,11 @@ public class LoginController {
                 String validateCode = generatePassword.crearPasswordOnlyNumbers();
 
                 //Calcular Fecha de Expiración
-                Date fechExp = emailService.SumarDias(new Date(),1);
-
+                //LocalDate fechExp = emailService.SumarDias(new Date(),1);
+                LocalDate fechExp = LocalDate.now().plusDays(1);
                 // Actualizar la tabla Usuario
                 logger.info("fechExp: "+fechExp);
-                user.setFechaExpCod(String.valueOf(fechExp));
+                user.setFechaExpCod(fechExp);
                 user.setCodReset(validateCode);
                 Usuario userUpdate = userService.updateUser(user.getIdUsuario(),user);
                 return emailService.sendSimpleMail(email,validateCode);
@@ -156,11 +157,11 @@ public class LoginController {
                 String validateCode = generatePassword.crearPasswordOnlyNumbers();
 
                 //Calcular Fecha de Expiración
-                Date fechExp = emailService.SumarDias(new Date(), 1);
-
+                //Date fechExp = emailService.SumarDias(new Date(), 1);
+                LocalDate fechExp = LocalDate.now().plusDays(1);
                 // Actualizar la tabla Usuario
                 logger.info("fechExp: " + fechExp);
-                user.setFechaExpCod(String.valueOf(fechExp));
+                user.setFechaExpCod(fechExp);
                 user.setCodReset(validateCode);
                 Usuario userUpdate = userService.updateUser(user.getIdUsuario(), user);
 

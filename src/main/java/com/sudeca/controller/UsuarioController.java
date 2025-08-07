@@ -1,5 +1,6 @@
 package com.sudeca.controller;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import com.sudeca.dto.*;
@@ -189,11 +190,11 @@ public class UsuarioController {
                 String validateCode = generatePassword.crearPasswordOnlyNumbers();
 
                 //Calcular Fecha de Expiración
-                Date fechExp = emailService.SumarDias(new Date(),1);
-
+                //Date fechExp = emailService.SumarDias(new Date(),1);
+                LocalDate fechExp = LocalDate.now().plusDays(1);
                 // Actualizar la tabla Usuario
                 logger.info("fechExp: "+fechExp);
-                user.setFechaExpCod(String.valueOf(fechExp));
+                user.setFechaExpCod(fechExp);
                 user.setCodReset(validateCode);
                 Usuario userUpdate = userService.updateUser(user.getIdUsuario(),user);
                 return emailService.sendSimpleMail(email,validateCode);
