@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +71,7 @@ public class RolServiceImpl implements IRolService {
                 _role.setRol(role.getRol());
                 _role.setDescripcion(role.getDescripcion());
                 _role.setEstatus(role.getEstatus());
-                _role.setFechaUp(String.valueOf(new Date()));
+                _role.setFechaUp(LocalDate.now());
                 _role.setFechaReg(roleData.get().getFechaReg());
                 return roleRepository.save(_role);
             } else {

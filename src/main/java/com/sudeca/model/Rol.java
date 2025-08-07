@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,10 +39,10 @@ public class Rol implements Serializable {
     private String descripcion;
 
     @Column(name = "fecha_reg")
-    private String fechaReg;
+    private LocalDate fechaReg;
 
     @Column(name = "fecha_up")
-    private String fechaUp;
+    private LocalDate fechaUp;
 
     @Column(name = "estatus")
     private Integer estatus;
@@ -60,8 +61,8 @@ public class Rol implements Serializable {
         this.rol = rol;
         this.descripcion = descripcion;
         this.estatus = status;
-        this.fechaReg = String.valueOf(new Date());
-        this.fechaUp = String.valueOf(new Date());
+        this.fechaReg = LocalDate.now();
+        this.fechaUp = LocalDate.now();
     }
 
     @Override
