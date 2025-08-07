@@ -67,7 +67,7 @@ public class CajaAhorro implements Serializable {
     private Short lapsoCierreMensual = 15;
 
     @Column(name = "id_moneda_local")
-    private Integer idMonedaLocal;
+    private Long idMonedaLocal;
 
     @Column(name = "fecha_inicio_vigencia")
     private LocalDate inicioVigencia;

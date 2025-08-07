@@ -23,10 +23,10 @@ public class PlanCatalogo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_plan_catalogo", nullable = false)
-    private long idPlanCatalogo;
+    private Long idPlanCatalogo;
 
     @Column(name = "id_plan_contable", nullable = false)
-    private long idPlanContable;
+    private Long idPlanContable;
 
     @Column(name = "nivel", nullable = false, precision = 2)
     private Integer nivel;
@@ -41,10 +41,10 @@ public class PlanCatalogo implements Serializable {
     private String descripcion;
 
     @Column(name = "id_cuenta_asc")
-    private Integer idCuentaAsc;
+    private Long idCuentaAsc;
 
     @Column(name = "id_taux")
-    private Integer idTaux;
+    private Long idTaux;
 
     @Column(name = "movimiento", nullable = false)
     private Boolean movimiento;

@@ -20,7 +20,7 @@ public record CajaAhorroDTO(
         @NotNull Short ultimoPeriodoCerrado,
         Short mesCierre,
         Short lapsoCierreMensual,
-        Integer idMonedaLocal,
+        Long idMonedaLocal,
         LocalDate inicioVigencia,
         LocalDate finVigencia,
         LocalDate ultimoLapsoGenerado,

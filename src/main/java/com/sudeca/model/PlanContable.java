@@ -16,7 +16,7 @@ public class PlanContable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_plan_contable")
-    private long idPlanContable;
+    private Long idPlanContable;
 
     @Column(name = "cod_plan")
     private String codPlan;

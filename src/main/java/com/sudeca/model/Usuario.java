@@ -23,7 +23,7 @@ public class Usuario implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id_usuario")
-  private long idUsuario;
+  private Long idUsuario;
 
   @Column(name = "usuario")
   private String usuario;

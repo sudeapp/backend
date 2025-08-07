@@ -18,7 +18,7 @@ public class CategoriaCajaAhorro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria_caho")
-    private Integer idCategoriaCaho;
+    private Long idCategoriaCaho;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria")

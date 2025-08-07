@@ -15,7 +15,7 @@ public class ComprobanteDTO {
     private Long idUsuarioVerificacion;
     private Long idUsuarioActualizacion;
     private Long idUsuarioCreacion;
-    private Integer idTcbte;
+    private Long idTcbte;
     private Long idCaho;
     private Long nroCbte;
     private List<ComprobanteDetDTO> comprobanteDet;

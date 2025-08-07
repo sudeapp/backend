@@ -24,7 +24,7 @@ public class UsuarioRol implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_usuario_rol")
-    private long idUsuarioRol;
+    private Long idUsuarioRol;
 
     @Column(name = "fecha_reg",
             nullable = false,

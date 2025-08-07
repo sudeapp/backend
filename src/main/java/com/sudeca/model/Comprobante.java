@@ -64,7 +64,7 @@ public class Comprobante implements Serializable {
     private Long idUsuarioActualizacion;
 
     @Column(name = "id_tcbte", nullable = false)
-    private Integer idTcbte;
+    private Long idTcbte;
 
     @Digits(integer = 18, fraction = 2)
     @Column(name = "bs_monto_diferencia", nullable = false, precision = 20, scale = 2)
