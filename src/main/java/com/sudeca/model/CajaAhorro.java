@@ -28,7 +28,7 @@ public class CajaAhorro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_caho")
-    private long idCaho;
+    private Long idCaho;
 
     @Column(name = "cod_caho", length = 10, nullable = false, unique = true)
     private String codigoCaho;
@@ -46,10 +46,10 @@ public class CajaAhorro implements Serializable {
     private String patrono;
 
     @Column(name = "sector_caho", nullable = false)
-    private Integer sector;
+    private Long sector;
 
     @Column(name = "id_plan_contable")
-    private long idPlanContable;
+    private Long idPlanContable;
 
     @Column(name = "mes_cierre", precision = 2, scale = 0, nullable = false)
     private Short mesCierre = 12;
@@ -79,7 +79,7 @@ public class CajaAhorro implements Serializable {
     private LocalDate ultimoLapsoGenerado;
 
     @Column(name = "usuario_creacion",nullable = false)
-    private Integer usuarioCreacion;
+    private Long usuarioCreacion;
 
     @Column(name = "estatus",nullable = false, length = 2)
     private Integer estatus;
