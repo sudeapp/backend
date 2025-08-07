@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record CajaAhorroDTO(
-        long idCaho,
+        Long idCaho,
         @NotBlank @Size(max = 10) String codigoCaho,
         @NotBlank @Size(max = 11) String rif,
 
@@ -13,8 +13,8 @@ public record CajaAhorroDTO(
         String descripcion,
 
         String patrono,
-        @NotNull Integer sector,
-        @NotNull Integer idPlan,
+        @NotNull Long sector,
+        @NotNull Long idPlan,
         @NotNull Short periodosEjercicio,
         @NotNull LocalDate ultimoMesCerrado,
         @NotNull Short ultimoPeriodoCerrado,
@@ -24,7 +24,7 @@ public record CajaAhorroDTO(
         LocalDate inicioVigencia,
         LocalDate finVigencia,
         LocalDate ultimoLapsoGenerado,
-        @NotNull Integer usuarioCreacion,
+        @NotNull Long usuarioCreacion,
         @NotNull Integer estatus,
         List<CategoriaDTO> categorias,
         List<UsuarioCajaDTO> usuarios
