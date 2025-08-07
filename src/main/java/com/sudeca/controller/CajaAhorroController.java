@@ -126,7 +126,27 @@ public class CajaAhorroController {
                                                                   @RequestParam("periodo") Integer periodo,
                                                                   @RequestParam("tipo") Boolean tipo) {
         LocalDate fecha1 = LocalDate.parse(fecha);
+        logger.info("getEstadoResultado fecha: "+fecha1);
+        List<EstadoResultadoDTO> res = funcionesService.obtenerEstadoResultado(idCaho,fecha1,periodo,tipo);
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (res != null){
+            responseDTO.setData(res);
+            responseDTO.setStatus("success");
+            responseDTO.setMessage("Reporte");
+        }else{
+            responseDTO.setData(false);
+            responseDTO.setStatus("notFound");
+            responseDTO.setMessage("Registro no encontrado");
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
 
+    @GetMapping("/balance-comprobacion")
+    public ResponseEntity<ResponseDTO> getBalanceComprobacion(@RequestParam("idCaho") Long idCaho,
+                                                          @RequestParam("fecha") String fecha,
+                                                          @RequestParam("periodo") Integer periodo,
+                                                          @RequestParam("tipo") Boolean tipo) {
+        LocalDate fecha1 = LocalDate.parse(fecha);
         logger.info("getEstadoResultado fecha: "+fecha1);
         List<EstadoResultadoDTO> res = funcionesService.obtenerEstadoResultado(idCaho,fecha1,periodo,tipo);
         ResponseDTO responseDTO = new ResponseDTO();

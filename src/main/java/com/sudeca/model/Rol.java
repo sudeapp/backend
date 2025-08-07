@@ -44,7 +44,7 @@ public class Rol implements Serializable {
     private String fechaUp;
 
     @Column(name = "estatus")
-    private String estatus;
+    private Integer estatus;
 
     @OneToMany(mappedBy = "rol",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
@@ -56,7 +56,7 @@ public class Rol implements Serializable {
     public Rol() {
     }
 
-    public Rol(String rol, String descripcion, String status) {
+    public Rol(String rol, String descripcion, Integer status) {
         this.rol = rol;
         this.descripcion = descripcion;
         this.estatus = status;
