@@ -1,6 +1,7 @@
 package com.sudeca.services;
 
 import com.sudeca.dto.Login;
+import com.sudeca.dto.PasswordUsuarioDTO;
 import com.sudeca.dto.PaswReset;
 import com.sudeca.dto.UsuarioDTO;
 import com.sudeca.model.Usuario;
@@ -28,4 +29,5 @@ public interface IUsuarioService {
     void deleteUser(long id);
     Usuario getCodReset(PaswReset paswReset);
     void updateUserStatus(Long idUsuario, Integer nuevoEstatus);
+    PasswordUsuarioDTO savePassword(PasswordUsuarioDTO user);
 }

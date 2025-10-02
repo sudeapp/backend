@@ -26,10 +26,13 @@ public class UsuarioDTO {
     private LocalDate fechaExpCod;
     private Integer estatus;
     private Long id_caho;
+    private Long sectorCaho;
+    private String codigoCaho;
     private String nombreCaho;
     private Long idPlanContable;
     private List<Long> rol = new ArrayList<>();
     private Long idRol;
+    private String nombreRol;
     private Integer permisologia;
     private String token;
     private int usuarioCaja;
@@ -55,6 +58,8 @@ public class UsuarioDTO {
         // Mapeo de relaciones (IDs)
         if (entity.getCajaAhorro() != null) {
             dto.setId_caho(entity.getCajaAhorro().getIdCaho());
+            dto.setSectorCaho(entity.getCajaAhorro().getSector());
+            dto.setCodigoCaho(entity.getCajaAhorro().getCodigoCaho());
             dto.setNombreCaho(entity.getCajaAhorro().getNombre());
             dto.setIdPlanContable(entity.getCajaAhorro().getIdPlanContable());
         }
@@ -69,6 +74,8 @@ public class UsuarioDTO {
 
             dto.setIdRol(entity.getRol().get(0).getRol().getIdRol());
             dto.setUsuarioCaja(entity.getRol().get(0).getRol().getUsuarioCaja());
+            dto.setNombreRol(entity.getRol().get(0).getRol().getRol());
+
             if(entity.getRol().get(0).getRol().getRolPermisologia() != null){
                 dto.setPermisologia(entity.getRol().get(0).getRol().getRolPermisologia().get(0).getPermisologia().getCodigo());
             }else{

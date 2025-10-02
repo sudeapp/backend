@@ -1,6 +1,5 @@
 package com.sudeca.controller;
 
-import com.google.gson.Gson;
 import com.sudeca.config.JWTAuthtenticationConfig;
 import com.sudeca.dto.*;
 import com.sudeca.model.Usuario;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static com.sudeca.security.Constans.*;
 
 @RestController
 @RequestMapping("/api")
@@ -45,7 +42,7 @@ public class LoginController {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         if(userData!=null) {
             logger.info("userData: "+ userData.getUsuario());
-            String token = jwtAuthtenticationConfig.getJWTToken(login.getUsuario());
+            String token = jwtAuthtenticationConfig.generarJWTToken(login.getUsuario());
             logger.info("token: "+ token);
             userData.setToken(token);
             usuarioDTO = usuarioDTO.toDTO(userData);

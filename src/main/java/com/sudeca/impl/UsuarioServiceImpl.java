@@ -1,10 +1,7 @@
 package com.sudeca.impl;
 
 import com.google.gson.Gson;
-import com.sudeca.dto.Login;
-import com.sudeca.dto.Message;
-import com.sudeca.dto.PaswReset;
-import com.sudeca.dto.UsuarioDTO;
+import com.sudeca.dto.*;
 import com.sudeca.model.*;
 import com.sudeca.repository.CajaAhorroRepository;
 import com.sudeca.repository.RolRepository;
@@ -18,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +23,10 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sudeca.security.Constans.*;
+import static com.sudeca.security.JwtConstans.*;
 
 /**
  * * Author: Francisco Hernandez
@@ -47,6 +44,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     UsuarioRolRepository usuarioRolRepository;
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     private CajaAhorroRepository cajaAhorroRepository;
     Message message;
     Gson gson = new Gson();
@@ -58,6 +57,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public Usuario saveUser(UsuarioDTO dto,boolean isUserCaja) {
         Usuario usuario = new Usuario();
+        //usuario.setPass(passwordEncoder.encode(dto.getPass()));
         usuario.setPass(dto.getPass());
         usuario.setNombre(dto.getNombre());
         usuario.setApellido(dto.getApellido());
@@ -195,6 +195,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
             if (userData.isPresent()) {
                 Usuario _user = userData.get();
                 _user.setUsuario(user.getUsuario());
+                //_user.setPass(passwordEncoder.encode(user.getPass()));
                 _user.setPass(user.getPass());
                 _user.setNombre(user.getNombre());
                 _user.setApellido(user.getApellido());
@@ -225,6 +226,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 Usuario _user = userData.get();
                 //_user.setUsuario(user.getUsuario());
                 _user.setPass(user.getPass());
+                //_user.setPass(passwordEncoder.encode(user.getPass()));
                 _user.setNombre(user.getNombre());
                 _user.setApellido(user.getApellido());
                 _user.setCedula(user.getCedula());
@@ -291,6 +293,83 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuario.setDateModified(LocalDate.now());  // Actualizar fecha de modificación
 
         userRepository.save(usuario);
+    }
+
+    @Override
+    @Transactional
+    public PasswordUsuarioDTO savePassword(PasswordUsuarioDTO user) {
+        /*Usuario usuario = userRepository.findById(user.getIdUsuario())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException("Usuario no encontrado con id: " + user.getIdUsuario()));
+
+        if(usuario.getPass().trim().equals(user.getViejo_password().trim())){
+            usuario.setPass(user.getNuevo_password());
+            usuario.setDateModified(LocalDate.now());
+            userRepository.save(usuario);
+            user.setMensaje("001");
+            return user;
+        }else{
+            user.setMensaje("002");
+            return user;
+        }
+
+        if (passwordEncoder.matches(user.getViejo_password(), usuario.getPass())) {
+            // La contraseña actual es correcta, ahora hashea la nueva contraseña
+            usuario.setPass(passwordEncoder.encode(user.getNuevo_password()));
+            usuario.setDateModified(LocalDate.now());
+            userRepository.save(usuario);
+            user.setMensaje("001"); // Contraseña cambiada exitosamente
+            return user;
+        } else {
+            user.setMensaje("002"); // Contraseña actual incorrecta
+            return user;
+        }
+        */
+
+        // Validaciones previas
+        if (user.getViejo_password() == null || user.getViejo_password().trim().isEmpty()) {
+            user.setMensaje("003"); // Contraseña actual vacía
+            return user;
+        }
+
+        if (user.getNuevo_password() == null || user.getNuevo_password().trim().isEmpty()) {
+            user.setMensaje("004"); // Nueva contraseña vacía
+            return user;
+        }
+
+        // Buscar el usuario
+        Usuario usuario = userRepository.findById(user.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Comparación segura de contraseñas (evita NullPointerException)
+        String passActualAlmacenado = usuario.getPass() != null ? usuario.getPass().trim() : "";
+        String passActualIngresado = user.getViejo_password() != null ? user.getViejo_password().trim() : "";
+
+        if (passActualAlmacenado.equals(passActualIngresado)) {
+            // La contraseña actual es correcta
+
+            // Validar que la nueva contraseña no sea igual a la anterior
+            if (passActualAlmacenado.equals(user.getNuevo_password().trim())) {
+                user.setMensaje("005"); // Nueva contraseña no puede ser igual a la anterior
+                return user;
+            }
+
+            // Validar longitud mínima de la nueva contraseña
+            if (user.getNuevo_password().trim().length() < 4) {
+                user.setMensaje("006"); // Contraseña demasiado corta
+                return user;
+            }
+
+            // Actualizar contraseña
+            usuario.setPass(user.getNuevo_password().trim());
+            usuario.setDateModified(LocalDate.now());
+            userRepository.save(usuario);
+
+            user.setMensaje("001"); // Contraseña cambiada exitosamente
+            return user;
+        } else {
+            user.setMensaje("002"); // Contraseña actual incorrecta
+            return user;
+        }
     }
 }
 

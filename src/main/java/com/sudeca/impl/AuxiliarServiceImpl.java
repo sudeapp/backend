@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sudeca.security.Constans.*;
+import static com.sudeca.security.JwtConstans.*;
 
 /**
  * * Author: Francisco Hernandez

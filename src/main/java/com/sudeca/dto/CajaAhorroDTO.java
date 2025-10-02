@@ -27,6 +27,8 @@ public record CajaAhorroDTO(
         @NotNull Long usuarioCreacion,
         @NotNull Integer estatus,
         List<CategoriaDTO> categorias,
-        List<UsuarioCajaDTO> usuarios
+        List<UsuarioCajaDTO> usuarios,
+
+        Long idPPlanContable
 ) {}
 

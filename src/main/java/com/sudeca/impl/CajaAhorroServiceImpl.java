@@ -18,6 +18,7 @@ import org.springframework.boot.context.config.ConfigDataResourceNotFoundExcepti
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +49,8 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private CategoriaCajaAhorroRepository categoriaCajaAhorroRepository;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
     public CajaAhorroServiceImpl() {
     }
 
@@ -60,6 +62,16 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
     @Override
     public CajaAhorro findByRif(String valor) {
         return cajaAhorroRepository.findByRif(valor);
+    }
+
+    @Override
+    public CajaAhorro findByValCodigo(String valor,Long id) {
+        return cajaAhorroRepository.findByValCodigoCaho(valor,id);
+    }
+
+    @Override
+    public CajaAhorro findByValRif(String valor,Long id) {
+        return cajaAhorroRepository.findByValRifCaho(valor,id);
     }
     @Override
     public CajaAhorro saveCajaAhorro(CajaAhorroDTO request) {
@@ -73,6 +85,7 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
             caja.setPatrono(request.patrono());
             caja.setSector(request.sector());
             caja.setIdPlanContable(request.idPlan());
+            caja.setIdPPlanContable(request.idPPlanContable());
             caja.setPeriodosEjercicio(request.periodosEjercicio());
             caja.setUltimoMesCerrado(request.ultimoMesCerrado());
             caja.setUltimoPeriodoCerrado(request.ultimoPeriodoCerrado());
@@ -106,6 +119,7 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
                     usuario.setEmail(usuariosRequest.email());
                     usuario.setUsuario(usuariosRequest.email());
                     usuario.setNombre(usuariosRequest.nombre());
+                    //usuario.setPass(passwordEncoder.encode(usuariosRequest.pass()));
                     usuario.setPass(usuariosRequest.pass());
                     usuario.setEstatus(usuariosRequest.estatus());
 
@@ -157,6 +171,7 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
             existingCaja.setInicioVigencia(updateDTO.inicioVigencia());
             existingCaja.setFinVigencia(updateDTO.finVigencia());
             existingCaja.setUltimoLapsoGenerado(updateDTO.ultimoLapsoGenerado());
+            existingCaja.setIdPPlanContable(updateDTO.idPPlanContable());
             //existingCaja.setUsuarioModificacion(usuarioModificacion);
             //existingCaja.setFechaModificacion(new Date());
 
@@ -198,6 +213,7 @@ public class CajaAhorroServiceImpl implements ICajaAhorroService {
                 UsuarioRol usuarioRol = new UsuarioRol();
                 nuevoUsuario.setNombre(usuarioDTO.nombre());
                 nuevoUsuario.setEmail(usuarioDTO.email());
+                //nuevoUsuario.setPass(passwordEncoder.encode(usuarioDTO.pass()));
                 nuevoUsuario.setPass(usuarioDTO.pass());
                 //nuevoUsuario.setRol(usuarioDTO.getRol());
                 nuevoUsuario.setEstatus(usuarioDTO.estatus());

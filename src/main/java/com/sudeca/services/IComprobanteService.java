@@ -24,4 +24,6 @@ public interface IComprobanteService {
                                          String nombreUsuario,
                                          Integer idEstatus);
     Comprobante actualizarComprobante(Long id, ComprobanteDTO comprobanteActualizado);
+
+    List<Comprobante> ultimosComprobantes(Long idCaho,Long idUsuario);
 }

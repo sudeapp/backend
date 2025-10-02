@@ -13,7 +13,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 
-import static com.sudeca.security.Constans.SECRET_KEY;
+import static com.sudeca.security.JwtConstans.SECRET_KEY;
 
 @Service
 public class CreateJWTImpl implements IManageJWT {

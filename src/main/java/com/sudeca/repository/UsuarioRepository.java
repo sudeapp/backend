@@ -18,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
   Usuario findByUsuarioAndPassContainingIgnoreCase(String usuario, String pass);
 
-  @Query("SELECT u FROM Usuario u WHERE u.usuario = :usuario and u.pass = :pass")
+  @Query("SELECT u FROM Usuario u WHERE u.usuario = :usuario and u.pass = :pass and u.estatus = 1")
   Usuario findByUsuarioAndPass(@Param("usuario") String usuario,String pass);
 
   Usuario findByCodResetContainingIgnoreCase(String code);

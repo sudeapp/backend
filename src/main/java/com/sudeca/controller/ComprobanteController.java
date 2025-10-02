@@ -142,6 +142,25 @@ public class ComprobanteController {
         }
     }
 
+    @GetMapping("/ultimos-comprobantes")
+    public ResponseEntity<List<Comprobante>> ultimosComprobantes(
+            @RequestParam(value = "idCaho", required = true) Long idCaho,
+            @RequestParam(value = "idUsuario", required = true) Long idUsuario) {
+
+
+        try {
+            List<Comprobante> resultados = comprobanteService.ultimosComprobantes(
+                    idCaho,
+                    idUsuario
+            );
+
+            return ResponseEntity.ok(resultados);
+        } catch (Exception e) {
+            logger.error("Error en búsqueda de comprobantes", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> actualizarComprobante(
             @PathVariable Long id,

@@ -84,6 +84,9 @@ public class CajaAhorro implements Serializable {
     @Column(name = "estatus",nullable = false, length = 2)
     private Integer estatus;
 
+    @Column(name = "id_pplan_contable")
+    private Long idPPlanContable;
+    
     @OneToMany(mappedBy = "cajaAhorro",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH},

@@ -6,7 +6,6 @@ import java.util.*;
 import com.sudeca.dto.*;
 import com.sudeca.model.*;
 
-import com.google.gson.Gson;
 import com.sudeca.utils.EmailService;
 import com.sudeca.services.IUsuarioService;
 import com.sudeca.utils.GeneratePassword;
@@ -16,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import static com.sudeca.security.Constans.*;
+import static com.sudeca.security.JwtConstans.*;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -114,6 +113,31 @@ public class UsuarioController {
         }
     }
 
+    @PostMapping("/cambiar-password")
+    public ResponseEntity<ResponseDTO> cambiarPassword(@RequestBody PasswordUsuarioDTO user) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            PasswordUsuarioDTO _user = userService.savePassword(user);
+            logger.info("_user: "+_user);
+            if (_user != null){
+                responseDTO.setData(_user);
+                responseDTO.setStatus("success");
+                responseDTO.setMessage("guardar");
+            }else{
+                responseDTO.setData(_user);
+                responseDTO.setStatus("notFound");
+                responseDTO.setMessage("error al guardar");
+            }
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setData(null);
+            responseDTO.setStatus("Error");
+            responseDTO.setMessage(ERROR_EXCEPTION_THROWN + " " +
+                    "Registro no guardado " + e.getMessage());
+            return ResponseEntity.ok(responseDTO);
+        }
+    }
+
     @PostMapping("/save-sudeca")
     public ResponseEntity<ResponseDTO> createUserSudeca(@RequestBody UsuarioDTO user) {
         ResponseDTO responseDTO = new ResponseDTO();
@@ -146,6 +170,33 @@ public class UsuarioController {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             Usuario userUpdate = userService.updateUserDTO(id,user);
+            logger.info("_user: "+user);
+            if (userUpdate != null){
+                responseDTO.setData(user);
+                responseDTO.setStatus("success");
+                responseDTO.setMessage("update");
+            }else{
+                responseDTO.setData(null);
+                responseDTO.setStatus("notFound");
+                responseDTO.setMessage("error al actualizar");
+            }
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setData(null);
+            responseDTO.setStatus("Error");
+            responseDTO.setMessage(ERROR_EXCEPTION_THROWN + " " +
+                    "Registro no guardado " + e.getMessage());
+            return ResponseEntity.ok(responseDTO);
+        }
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<ResponseDTO> updateUserProfile(@RequestParam("id") long id, @RequestBody Usuario user) {
+        logger.info("updateUser _user: " + id,user);
+
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            Usuario userUpdate = userService.updateUser(id,user);
             logger.info("_user: "+user);
             if (userUpdate != null){
                 responseDTO.setData(user);

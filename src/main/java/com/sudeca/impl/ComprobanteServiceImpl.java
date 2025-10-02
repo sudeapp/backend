@@ -14,6 +14,8 @@ import jakarta.persistence.criteria.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -98,6 +100,11 @@ public class ComprobanteServiceImpl implements IComprobanteService {
         totalDiferencia = totalDebe.subtract(totalHaber);
     }
 
+    @Override
+    public List<Comprobante> ultimosComprobantes(Long idCaho,Long idUsuario){
+        Pageable pageable = PageRequest.of(0, 10);
+        return comprobanteRepository.ultimosComprobantes(idCaho,idUsuario,pageable);
+    }
     @Override
     public List<Comprobante> buscarComprobantes(Long idCaho,
                                                 LocalDate fechaInicio,
@@ -186,13 +193,17 @@ public class ComprobanteServiceImpl implements IComprobanteService {
         comprobante.setFechaCbte(request.getFechaCbte());
         comprobante.setPeriodo(request.getPeriodo());
         comprobante.setEstatusCbte(request.getEstatusCbte());
-        comprobante.setFechaVerificacion(request.getFechaVerificacion());
-        comprobante.setIdUsuarioVerificacion(request.getIdUsuarioVerificacion());
+        //comprobante.setFechaVerificacion(request.getFechaVerificacion());
+        //comprobante.setIdUsuarioVerificacion(request.getIdUsuarioVerificacion());
+        comprobante.setFechaVerificacion(null);
+        comprobante.setIdUsuarioVerificacion(null);
         comprobante.setIdTcbte(request.getIdTcbte());
 
         // Campos de auditoría
-        comprobante.setFechaActualizacion(LocalDate.now());
-        comprobante.setIdUsuarioActualizacion(usuarioActualId);
+        //comprobante.setFechaActualizacion(LocalDate.now());
+        //comprobante.setIdUsuarioActualizacion(usuarioActualId);
+        comprobante.setFechaModificacion(LocalDate.now());
+        comprobante.setIdUsuarioModificacion(usuarioActualId);
     }
 
     private ComprobanteDet convertirRequestADetalle(ComprobanteDetDTO request) {

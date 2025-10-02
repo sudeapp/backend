@@ -2,9 +2,11 @@ package com.sudeca.controller;
 
 import com.sudeca.dto.*;
 import com.sudeca.model.CajaAhorro;
+import com.sudeca.model.PlantillaPlanContable;
 import com.sudeca.model.view.Vpc;
 import com.sudeca.services.ICajaAhorroService;
 import com.sudeca.services.IFuncionesService;
+import com.sudeca.services.IPPlanContableService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,10 @@ public class CajaAhorroController {
     private static final Logger logger = LogManager.getLogger();
     @Autowired
     private ICajaAhorroService cajaAhorroService;
-
     @Autowired
     private IFuncionesService funcionesService;
-
+    @Autowired
+    private IPPlanContableService ppContableService;
     @PostMapping
     public ResponseEntity<?> saveCajaAhorro(@RequestBody CajaAhorroDTO request) {
         try {
@@ -59,6 +61,26 @@ public class CajaAhorroController {
                 : ResponseEntity.ok(null);
     }
 
+    @GetMapping("/validar-caja")
+    public ResponseEntity<CajaAhorro> validarCaja(
+            @RequestParam String tipo,
+            @RequestParam String valor,
+            @RequestParam Long idCaho) {
+
+        CajaAhorro caja;
+        if ("codigo".equals(tipo)) {
+            caja = cajaAhorroService.findByValCodigo(valor,idCaho);
+        } else if ("rif".equals(tipo)) {
+            caja = cajaAhorroService.findByValRif(valor,idCaho);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return caja != null
+                ? ResponseEntity.ok(caja)
+                : ResponseEntity.ok(null);
+    }
+
     @PutMapping
     public ResponseEntity<?> updateCajaAhorro(@RequestBody CajaAhorroDTO updateDTO) {
         try {
@@ -69,6 +91,23 @@ public class CajaAhorroController {
             return ResponseEntity.internalServerError()
                     .body("Error al actualizar la caja de ahorro: " + ex.getMessage());
         }
+    }
+
+    @GetMapping("/lista-pplan-contable")
+    public ResponseEntity<ResponseDTO> getListaPPlanContable() {
+        logger.info("getListaPPlanContable");
+        List<PlantillaPlanContable> res = ppContableService.getAllPPlanContable();
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (res != null){
+            responseDTO.setData(res);
+            responseDTO.setStatus("success");
+            responseDTO.setMessage("Consulta");
+        }else{
+            responseDTO.setData(false);
+            responseDTO.setStatus("notFound");
+            responseDTO.setMessage("Registro no encontrado");
+        }
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/cierre")
@@ -148,7 +187,28 @@ public class CajaAhorroController {
                                                           @RequestParam("tipo") Boolean tipo) {
         LocalDate fecha1 = LocalDate.parse(fecha);
         logger.info("getEstadoResultado fecha: "+fecha1);
-        List<EstadoResultadoDTO> res = funcionesService.obtenerEstadoResultado(idCaho,fecha1,periodo,tipo);
+        List<BalanceComprobacionDTO> res = funcionesService.obtenerBalanceComprobacion(idCaho,fecha1,periodo,tipo);
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (res != null){
+            responseDTO.setData(res);
+            responseDTO.setStatus("success");
+            responseDTO.setMessage("Reporte");
+        }else{
+            responseDTO.setData(false);
+            responseDTO.setStatus("notFound");
+            responseDTO.setMessage("Registro no encontrado");
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/balance-general")
+    public ResponseEntity<ResponseDTO> getBalanceGeneral(@RequestParam("idCaho") Long idCaho,
+                                                              @RequestParam("fecha") String fecha,
+                                                              @RequestParam("periodo") Integer periodo,
+                                                              @RequestParam("tipo") Boolean tipo) {
+        LocalDate fecha1 = LocalDate.parse(fecha);
+        logger.info("getEstadoResultado fecha: "+fecha1);
+        List<BalanceGeneralDTO> res = funcionesService.obtenerBalanceGeneral(idCaho,fecha1,periodo,tipo);
         ResponseDTO responseDTO = new ResponseDTO();
         if (res != null){
             responseDTO.setData(res);
@@ -201,6 +261,40 @@ public class CajaAhorroController {
         responseDTO.setStatus("success");
         responseDTO.setMessage("validación");
 
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/cierre-mensual")
+    public ResponseEntity<ResponseDTO> getCierreMensual(@RequestParam("idCaho") Long idCaho,@RequestParam("idUsuario") Long idUsuario) {
+        logger.info("getCierreMensual: "+ idCaho);
+        boolean res = funcionesService.getCierreMensual(idCaho,idUsuario);
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (res){
+            responseDTO.setData(true);
+            responseDTO.setStatus("success");
+            responseDTO.setMessage("Verificación");
+        }else{
+            responseDTO.setData(false);
+            responseDTO.setStatus("notFound");
+            responseDTO.setMessage("Registro no verificado");
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/cierre-anual")
+    public ResponseEntity<ResponseDTO> getCierreAnual(@RequestParam("idCaho") Long idCaho,@RequestParam("idUsuario") Long idUsuario) {
+        logger.info("getCierreAnual: "+ idCaho);
+        boolean res = funcionesService.getCierreAnual(idCaho,idUsuario);
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (res){
+            responseDTO.setData(true);
+            responseDTO.setStatus("success");
+            responseDTO.setMessage("Verificación");
+        }else{
+            responseDTO.setData(false);
+            responseDTO.setStatus("notFound");
+            responseDTO.setMessage("Registro no verificado");
+        }
         return ResponseEntity.ok(responseDTO);
     }
 }

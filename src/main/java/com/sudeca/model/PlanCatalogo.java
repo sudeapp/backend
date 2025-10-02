@@ -6,17 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
 @Data
-@AllArgsConstructor
-@Builder
 @Entity
 @Table(
         name = "plan_catalogo",
-        schema = "contabilidad",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "planc_uk1", columnNames = {"id_plan", "cuenta"}),
-                @UniqueConstraint(name = "planc_uk2", columnNames = {"id_cuenta", "id_plan", "nivel", "longitud"}),
-                @UniqueConstraint(name = "planc_uk3", columnNames = {"id_plan", "id_cuenta", "id_taux"})
-        }
+        schema = "contabilidad"
 )
 public class PlanCatalogo implements Serializable {
 
@@ -43,8 +36,12 @@ public class PlanCatalogo implements Serializable {
     @Column(name = "id_cuenta_asc")
     private Long idCuentaAsc;
 
-    @Column(name = "id_taux")
-    private Long idTaux;
+    /*@Column(name = "id_taux")
+    private Long idTaux;*/
+
+    @ManyToOne
+    @JoinColumn(name = "id_taux", referencedColumnName = "id_taux", nullable = true)
+    private AuxiliarTipo auxiliarTipo;
 
     @Column(name = "movimiento", nullable = false)
     private Boolean movimiento;

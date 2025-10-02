@@ -51,6 +51,12 @@ public class Comprobante implements Serializable {
     @JoinColumn(name = "id_usuario_creacion", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuarioCreacion;
 
+    @Column(name = "fecha_modificacion")
+    private LocalDate fechaModificacion;
+
+    @Column(name = "id_usuario_modificacion")
+    private Long idUsuarioModificacion;
+
     @Column(name = "fecha_verificacion")
     private LocalDate fechaVerificacion;
 
@@ -80,13 +86,15 @@ public class Comprobante implements Serializable {
     @Column(name = "bs_monto_credito", nullable = false, precision = 20, scale = 2)
     private BigDecimal bsMontoCredito = BigDecimal.ZERO;
 
-  /*  @OneToMany(mappedBy = "comprobante",
+    /*
+    @OneToMany(mappedBy = "comprobante",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH},
             orphanRemoval = true)
     @JsonManagedReference
     private List<ComprobanteDet> comprobanteDet = new ArrayList<>();
-*/
+    */
+
     @OneToMany(
             mappedBy = "comprobante",
             cascade = CascadeType.ALL,

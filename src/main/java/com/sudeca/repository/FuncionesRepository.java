@@ -1,6 +1,8 @@
 package com.sudeca.repository;
 
 import com.sudeca.dto.LibroDiarioDTO;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
@@ -61,6 +63,57 @@ public class FuncionesRepository {
                 Boolean.class,
                 idCaho,
                 fecha
+        );
+    }
+
+    public String callValidaCodigoContable(Long idCaho, String pCuenta) {
+        String sql = "SELECT contabilidad.valida_codigo_contable(?, ?)";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                String.class,
+                idCaho,
+                pCuenta
+        );
+    }
+
+    public String callValidaCodigoContablePlantilla(Long idCaho, String pCuenta) {
+        String sql = "SELECT contabilidad.valida_codigo_contable_plantilla(?, ?)";
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                String.class,
+                idCaho,
+                pCuenta
+        );
+    }
+
+    public boolean getValidaNivelPlantilla(Long idPPlan) {
+        String sql = "SELECT contabilidad.valida_niveles_plan_contable(?)";
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                idPPlan
+        );
+    }
+
+    public boolean getCierreMensual(Long idCaho,Long idUsuario) {
+        String sql = "SELECT contabilidad.cierre_mensual(?,?)";
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                idCaho,
+                idUsuario
+        );
+    }
+
+    public boolean getCierreAnual(Long idCaho,Long idUsuario) {
+        String sql = "SELECT contabilidad.asiento_cierre_ejercicio(?,?)";
+        return jdbcTemplate.queryForObject(
+                sql,
+                Boolean.class,
+                idCaho,
+                idUsuario
         );
     }
 }

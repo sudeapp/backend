@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sudeca.security.Constans.AUXI_EXISTS_BD;
+import static com.sudeca.security.JwtConstans.AUXI_EXISTS_BD;
 
 /**
  * * Author: Francisco Hernandez

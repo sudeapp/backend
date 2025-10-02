@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.sudeca.security.Constans.*;
+import static com.sudeca.security.JwtConstans.*;
 
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
@@ -58,20 +58,27 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			FilterChain filterChain)
+			throws ServletException, IOException {
 		try {
 			if (isJWTValid(request, response)) {
 				Claims claims = setSigningKey(request);
 				logger.info("claims: " +claims);
 				logger.info("claims.get(authorities): " +claims.get("authorities"));
 				if (claims.get("authorities") != null) {
+					logger.info("1 authorities: " +claims);
 					setAuthentication(claims);
 				} else {
+					logger.info("2 authorities: " +claims);
 					SecurityContextHolder.clearContext();
 				}
 			} else {
 				SecurityContextHolder.clearContext();
 			}
+			logger.info("3 authorities: ");
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);

@@ -1,9 +1,7 @@
 package com.sudeca.impl;
 
-import com.sudeca.dto.EstadoResultadoDTO;
-import com.sudeca.dto.LibroDiarioDTO;
-import com.sudeca.dto.ListaComprobanteDTO;
-import com.sudeca.dto.UltimosMovimientosDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sudeca.dto.*;
 import com.sudeca.model.view.Vpc;
 import com.sudeca.repository.*;
 import com.sudeca.services.IFuncionesService;
@@ -35,6 +33,10 @@ public class FuncionesServiceImpl implements IFuncionesService {
     private RListaComprobanteRepository listaComprobanteRepository;
     @Autowired
     private REstadoResultadoRepository estadoResultadoRepository;
+    @Autowired
+    private RBalanceComprobacionRepository balanceComprobacionRepository;
+    @Autowired
+    private RBalanceGeneralRepository balanceGeneralRepository;
     @Autowired
     private UltimosMovimientosRepository ultimosMovimientosRepository;
     @Autowired
@@ -80,11 +82,60 @@ public class FuncionesServiceImpl implements IFuncionesService {
     }
 
     @Override
+    public List<BalanceGeneralDTO> obtenerBalanceGeneral(Long idCaja, LocalDate fecha, Integer periodo, Boolean tipo) {
+        return balanceGeneralRepository.findBalanceGeneral(idCaja,fecha,periodo,tipo);
+    }
+
+    @Override
+    public List<BalanceComprobacionDTO> obtenerBalanceComprobacion(Long idCaja, LocalDate fecha, Integer periodo, Boolean tipo) {
+        return balanceComprobacionRepository.findBalanceComprobacion(idCaja,fecha,periodo,tipo);
+    }
+
+    @Override
     public List<UltimosMovimientosDTO> obtenerUltimosMovimientos(Long idCaho, Integer dias) {
         return ultimosMovimientosRepository.findUltimosMovimientos(idCaho,dias);
     }
 
     public List<Vpc> obtenerVpc(Long id) {
         return vpcRepository.findByIdCaho(id);
+    }
+
+    @Override
+    public ValidaCodigoContableDTO validarCodigoContableCaja(Long pIdCaho, String pCuenta) {
+        String jsonResult = funcionesRepository.callValidaCodigoContable(pIdCaho, pCuenta);
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(jsonResult, ValidaCodigoContableDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al parsear el resultado JSON", e);
+        }
+    }
+
+    @Override
+    public ValidaCodigoContableDTO validarCodigoContablePlantilla(Long pIdCaho, String pCuenta) {
+        String jsonResult = funcionesRepository.callValidaCodigoContablePlantilla(pIdCaho, pCuenta);
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(jsonResult, ValidaCodigoContableDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al parsear el resultado JSON", e);
+        }
+    }
+
+    @Override
+    public boolean getValidaNivelPlantilla(Long idPPlanContable) {
+        return funcionesRepository.getValidaNivelPlantilla(idPPlanContable);
+    }
+
+    @Override
+    public boolean getCierreMensual(Long idCaho,Long idUsuario) {
+        return funcionesRepository.getCierreMensual(idCaho,idUsuario);
+    }
+
+    @Override
+    public boolean getCierreAnual(Long idCaho,Long idUsuario) {
+        return funcionesRepository.getCierreAnual(idCaho,idUsuario);
     }
 }
